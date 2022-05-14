@@ -1,0 +1,307 @@
+﻿<Window x:Class="Launcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Launcher"
+        mc:Ignorable="d"
+        Height="544" Width="1080"
+        WindowStyle="None" 
+        Loaded="Window_Loaded"
+        Name="myMainWindow"
+        WindowStartupLocation="CenterScreen" ContentRendered="Window_ContentRendered" MouseDown="Window_MouseDown" AllowsTransparency="True"       
+        >
+    <Window.Resources>
+        <Style x:Key="NormalMouseButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="LeftMouseButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Left" Margin="10, 0, 0, 0" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="RightMouseButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Right" Margin="0, 0, 10, 0" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type ProgressBar}">
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF135489" Offset="0.229"/>
+                        <GradientStop Color="#FF55A3E2" Offset="1"/>
+                        <GradientStop Color="#FF367BB3" Offset="0.523"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ProgressBar}">
+                        <Grid x:Name="TemplateRoot">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Determinate"/>
+                                    <VisualState x:Name="Indeterminate">
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0.25"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.25"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.25"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <PointAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)">
+                                                <EasingPointKeyFrame KeyTime="0" Value="-0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:1" Value="0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:2" Value="1.5,0.5"/>
+                                            </PointAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border Name="PART_Track" 
+                            CornerRadius="3" 
+                            Background="White"
+                            BorderBrush="{x:Null}" />
+
+                            <Grid x:Name="PART_Indicator" ClipToBounds="true" HorizontalAlignment="Left">
+                                <Rectangle x:Name="Indicator" Fill="{TemplateBinding Foreground}" RadiusX="3" RadiusY="3"/>
+                                <Rectangle x:Name="Animation" Fill="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5" RadiusX="3" RadiusY="3">
+                                    <Rectangle.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="LayoutTransform" TargetName="TemplateRoot">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsIndeterminate" Value="true">
+                                <Setter Property="Visibility" TargetName="Indicator" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+    <Window.Background>
+        <ImageBrush/>
+    </Window.Background>
+    <Grid Name="MainGrid" SizeChanged="MainGrid_SizeChanged">
+        <Grid.LayoutTransform>
+            <ScaleTransform x:Name="ApplicationScaleTransform"
+                        ScaleX="{Binding ElementName=myMainWindow, Path=ScaleValue}"
+                        ScaleY="{Binding ElementName=myMainWindow, Path=ScaleValue}" />
+        </Grid.LayoutTransform>
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Height="544" Width="1080">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="36*"/>
+                <RowDefinition Height="23*"/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="33*"/>
+                <RowDefinition Height="14*"/>
+                <RowDefinition Height="14*"/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="18*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="23*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="23*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="23*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="23*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="23*"/>
+                <RowDefinition Height="8*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="15*"/>
+                <RowDefinition Height="25*"/>
+                <RowDefinition Height="15*"/>
+                <RowDefinition Height="12*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="12*"/>
+                <RowDefinition Height="55*"/>
+                <RowDefinition Height="58*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="461*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="22*"/>
+                <ColumnDefinition Width="38*"/>
+                <ColumnDefinition Width="13*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="37*"/>
+                <ColumnDefinition Width="49*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="43*"/>
+                <ColumnDefinition Width="39*"/>
+                <ColumnDefinition Width="84*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="40*"/>
+                <ColumnDefinition Width="45*"/>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="67*"/>
+                <ColumnDefinition Width="18*"/>
+                <ColumnDefinition Width="18*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="18*"/>
+            </Grid.ColumnDefinitions>
+            <Image x:Name="Background" Source="/img/bg.png" Grid.Column="0" Grid.ColumnSpan="23" Grid.Row="0" Grid.RowSpan="29"/>
+            <Button x:Name="Home" Style="{StaticResource NormalMouseButton}" Content="Home" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="3" FontFamily="Consolas" FontWeight="Bold" Click="Home_Click" Foreground="White" IsTabStop="False" Margin="0,0,0,30" Grid.RowSpan="2"/>
+            <Button x:Name="Register" Style="{StaticResource NormalMouseButton}" Content="Register" Grid.Row="3" Grid.Column="6" Foreground="White" FontFamily="Consolas" FontWeight="Bold" Click="Register_Click" Grid.ColumnSpan="2" IsTabStop="False" Margin="0,0,0,30" Grid.RowSpan="2"/>
+            <Button x:Name="Recharge" Style="{StaticResource NormalMouseButton}" Content="Recharge" Grid.Row="3" Grid.Column="8" Foreground="White" FontFamily="Consolas" FontSize="12" FontWeight="Bold" Click="Recharge_Click" IsTabStop="False" Grid.ColumnSpan="3" Margin="0,0,0,30" Grid.RowSpan="2"/>
+            <Button x:Name="Fanpage" Style="{StaticResource NormalMouseButton}" Content="Fanpage" Grid.Row="3" Grid.Column="11" Foreground="White" FontFamily="Consolas" FontSize="12" FontWeight="Bold" Click="Fanpage_Click" Grid.ColumnSpan="2" IsTabStop="False" Margin="0,0,0,30" Grid.RowSpan="2"/>
+            <Button x:Name="Group" Style="{StaticResource NormalMouseButton}" Content="Group" Grid.Row="3" Grid.Column="13" Foreground="White" FontFamily="Consolas" FontSize="12" FontWeight="Bold" Click="Group_Click" Grid.ColumnSpan="2" IsTabStop="False" Margin="0,0,0,30" Grid.RowSpan="2"/>
+            <Button x:Name="Minimize" Style="{StaticResource NormalMouseButton}" Grid.Column="20" Grid.Row="1" Click="Minimize_Button" Margin="0,0,0,6" Grid.RowSpan="2">
+                <Button.Background>
+                    <ImageBrush Stretch="Uniform" ImageSource="/img/-.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="Exit" Style="{StaticResource NormalMouseButton}" Grid.Column="22" Grid.Row="1" Click="Exit_Button" Margin="0,0,0,6" Grid.RowSpan="2">
+                <Button.Background>
+                    <ImageBrush ImageSource="/img/Exit.png" Stretch="Uniform"/>
+                </Button.Background>
+            </Button>
+            <TextBlock x:Name="VersionClient" TextAlignment="Center" Grid.Row="5" Text="Current Version: " FontFamily="{StaticResource Myriad Arabic}" Foreground="White" FontSize="13" FontWeight="Bold" VerticalAlignment="Center" Grid.ColumnSpan="3" Grid.Column="2" AutomationProperties.IsColumnHeader="True"/>
+            <TextBlock x:Name="Ver" TextAlignment="Left" Grid.Column="5" Grid.Row="5" Foreground="White" FontFamily="{StaticResource Myriad Arabic}" FontSize="13" FontWeight="Bold" Grid.ColumnSpan="2" Grid.RowSpan="1"/>
+            <TextBlock x:Name="LastVersion" TextAlignment="Center" Grid.Row="5" Text="Last Version: " FontFamily="{StaticResource Myriad Arabic}" Foreground="White" Grid.Column="7" FontSize="13" VerticalAlignment="Center" FontWeight="Bold" Grid.ColumnSpan="2" UseLayoutRounding="False" Margin="1,0,0,0"/>
+            <TextBlock x:Name="VerSer" TextAlignment="Left" Grid.Column="9" Grid.Row="5" Foreground="White" FontFamily="{StaticResource Myriad Arabic}" FontSize="13" FontWeight="Bold" Grid.RowSpan="1" Margin="4,0,0,0"/>
+            <TextBlock x:Name="UStatus" TextAlignment="Left" Grid.Column="10" Grid.Row="5" Foreground="White" FontFamily="{StaticResource Myriad Arabic}" FontSize="13" Grid.ColumnSpan="2" VerticalAlignment="Center" FontWeight="Bold" Margin="3,0,0,0"/>
+            <Image x:Name="Banner" Grid.Row="7" Grid.RowSpan="14" Grid.ColumnSpan="12" MouseLeftButtonDown="Banner_MouseLeftButtonDown" ToolTip="Click to open" Cursor="Hand" Stretch="UniformToFill" Grid.Column="1"/>
+            <Button Name="Pre_btn" Style="{StaticResource NormalMouseButton}" Grid.Column="11" Grid.Row="20" Click="Pre_btn_Click" ToolTip="Previous" Visibility="Visible" Width="27" Height="26" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,24,0">
+                <Button.Background>
+                    <ImageBrush ImageSource="img/Pre.png" Stretch="Uniform"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="Next_btn" Style="{StaticResource NormalMouseButton}"  Grid.Column="11" Grid.Row="20" Click="Next_btn_Click" ToolTip="Next" Height="26" Width="27" VerticalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,2,0">
+                <Button.Background>
+                    <ImageBrush ImageSource="img/Next.png" Stretch="Uniform"/>
+                </Button.Background>
+            </Button>
+            <Image Source="/img/bangtin2.png" Grid.Row="7" Grid.Column="14" Grid.ColumnSpan="6" Stretch="Fill" Grid.RowSpan="13"/>
+            <Label Grid.Column="16" Grid.ColumnSpan="2" Grid.Row="8" Foreground="#FF918078" Content="News" FontFamily="Comic Sans MS" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="ExtraBold" FontSize="13" Padding="0,0,0,0" Margin="0,0,0,4" Grid.RowSpan="2"/>
+            <Button x:Name="More" Style="{StaticResource NormalMouseButton}" Content="+" Grid.Column="19" Grid.Row="8" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF918078" FontFamily="Comic Sans MS" FontSize="15" FontWeight="Bold" Click="More_Click" Grid.RowSpan="2" VerticalContentAlignment="Center" Margin="0,0,0,5"/>
+            <Button x:Name="News1" IsEnabled="False" Style="{StaticResource LeftMouseButton}" Grid.Column="14" Grid.Row="10" Grid.ColumnSpan="6" Background="{x:Null}" Foreground="#FF918078" BorderBrush="{x:Null}" Margin="0,0,5,2" Grid.RowSpan="2"/>
+            <Button x:Name="News2" IsEnabled="False" Style="{StaticResource LeftMouseButton}" Grid.Column="14" Grid.Row="12" Grid.ColumnSpan="6" Background="{x:Null}" Foreground="#FF918078" BorderBrush="{x:Null}" Margin="0,0,5,2" Grid.RowSpan="2"/>
+            <Button x:Name="News3" IsEnabled="False" Style="{StaticResource LeftMouseButton}" Grid.Column="14" Grid.Row="14" Grid.ColumnSpan="6" Background="{x:Null}" Foreground="#FF918078" BorderBrush="{x:Null}" Margin="0,0,5,2" Grid.RowSpan="2"/>
+            <Button x:Name="News4" IsEnabled="False" Style="{StaticResource LeftMouseButton}" Grid.Column="14" Grid.Row="16" Grid.ColumnSpan="6" Background="{x:Null}" Foreground="#FF918078" BorderBrush="{x:Null}" Margin="0,0,5,0"/>
+            <Button x:Name="News5" IsEnabled="False" Style="{StaticResource LeftMouseButton}" Grid.Column="14" Grid.Row="17" Grid.ColumnSpan="6" Background="{x:Null}" Foreground="#FF918078" BorderBrush="{x:Null}" Margin="0,2,5,0" Grid.RowSpan="2"/>
+            <Button x:Name="NewBiesGuide" Style="{StaticResource RightMouseButton}" Grid.Row="20" Grid.Column="14"  Click="NewBiesGuide_Click" Grid.ColumnSpan="3" Content="Guide" FontWeight="Bold" FontSize="18" Margin="0,5,0,0" MouseEnter="NewBiesGuide_MouseEnter" MouseLeave="NewBiesGuide_MouseLeave" Foreground="White" FontFamily="{StaticResource UTM AS SignWriter}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/img/Guide.png" Stretch="Fill"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="FixClient" IsEnabled="False" Style="{StaticResource LeftMouseButton}" Grid.Column="17" Grid.ColumnSpan="3" Grid.Row="20" Click="FixClient_Click" MouseEnter="FixClient_MouseEnter" MouseLeave="FixClient_MouseLeave" Margin="0,5,0,0" ForceCursor="True" Foreground="White" FontFamily="{StaticResource UTM AS SignWriter}" Content="Fix Client" FontSize="18" FontWeight="Bold">
+                <Button.Background>
+                    <ImageBrush ImageSource="/img/FixClient.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="UpdateStatus_btn" Style="{StaticResource NormalMouseButton}" IsEnabled="False" Grid.Row="21" Click="UpdateStatus_btn_Click" MouseEnter="UpdateStatus_btn_MouseEnter" MouseLeave="UpdateStatus_btn_MouseLeave" Grid.ColumnSpan="5" Grid.Column="1" VerticalContentAlignment="Stretch" Margin="0,15,0,0" Grid.RowSpan="2">
+                <Button.Background>
+                    <ImageBrush ImageSource="img/update-Button.png" Stretch="Uniform"/>
+                </Button.Background>
+            </Button>
+            <TextBlock x:Name="UpdateStatus" Grid.Column="6" Grid.ColumnSpan="7" Grid.Row="21" VerticalAlignment="Top" TextAlignment="Left" FontSize="25" FontWeight="UltraBold" FontFamily="{StaticResource Myriad Arabic}" Foreground="White" Margin="5,15,0,0" Grid.RowSpan="3" Height="29"/>
+            <ProgressBar x:Name="Loading" Value="100" Grid.Row="23" Grid.ColumnSpan="15" BorderBrush="{x:Null}" Grid.Column="1" Margin="0,15,0,0" Grid.RowSpan="2">
+                <ProgressBar.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                <RotateTransform Angle="270" CenterY="0.5" CenterX="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF0F77B8" Offset="0.469"/>
+                        <GradientStop Color="#FF19DBEC" Offset="1"/>
+                    </LinearGradientBrush>
+                </ProgressBar.Foreground>
+            </ProgressBar>
+            <ProgressBar x:Name="Loading_Copy" Value="100" Grid.Row="25" Grid.ColumnSpan="15" BorderBrush="{x:Null}" Grid.Column="1" Margin="0,2,0,0" Grid.RowSpan="2">
+                <ProgressBar.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                <RotateTransform Angle="270" CenterY="0.5" CenterX="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="#FF02A593" Offset="0.491"/>
+                        <GradientStop Color="#FF05E9DF" Offset="1"/>
+                    </LinearGradientBrush>
+                </ProgressBar.Foreground>
+            </ProgressBar>
+            <Label Name="Analyzing" Content="Analyzing" Visibility="Hidden" Grid.Column="1" Grid.Row="23" Foreground="Black" FontFamily="Comic Sans MS" Grid.ColumnSpan="15" HorizontalContentAlignment="Center" FontSize="8" Padding="0,0,4,0" VerticalContentAlignment="Center" FontWeight="Bold" Margin="0,15,0,0" Grid.RowSpan="2" HorizontalAlignment="Stretch"/>
+            <Label Name="FileName" Grid.Column="1" Grid.Row="23" Foreground="Black" FontFamily="Comic Sans MS" Grid.ColumnSpan="15" HorizontalContentAlignment="Right" FontSize="8" Padding="0,0,0,0" VerticalContentAlignment="Center" FontWeight="Bold" Margin="0,15,0,0" Grid.RowSpan="2" Width="210" HorizontalAlignment="Left"/>
+            <Label Name="OneFileProgress" Grid.Column="1" Grid.Row="23" Foreground="Black" FontFamily="Comic Sans MS" Grid.ColumnSpan="15" HorizontalContentAlignment="Left" FontSize="8" Padding="0,0,0,0" VerticalContentAlignment="Center" FontWeight="Bold" Margin="0,15,0,0" Grid.RowSpan="2" Width="228" HorizontalAlignment="Right"/>
+            <Label Name="Progress" Grid.Column="1" Grid.Row="25" Foreground="Black" FontFamily="Comic Sans MS" Grid.ColumnSpan="15" HorizontalContentAlignment="Center" FontSize="8" Padding="0,0,0,0" VerticalContentAlignment="Center" FontWeight="Bold" HorizontalAlignment="Stretch" Grid.RowSpan="2" VerticalAlignment="Stretch" Margin="0,2,0,0"/>
+            <Button x:Name="PlayGame" Style="{StaticResource NormalMouseButton}" IsEnabled="False" Grid.Column="16" Grid.ColumnSpan="7" Grid.Row="20" Grid.RowSpan="8" Click="PlayGame_Click"  MouseEnter="PlayGame_MouseEnter" MouseLeave="PlayGame_MouseLeave" ClickMode="Press" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="0,35,2,0">
+                <Button.Background>
+                    <ImageBrush ImageSource="img/playgame-button.png" Stretch ="Uniform"/>
+                </Button.Background>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

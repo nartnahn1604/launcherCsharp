@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+	  <ApplicationIcon>img\Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Fonts\Myriad Arabic Regular.ttf" />
+    <None Remove="Fonts\UTM A&amp;S Signwriter.ttf" />
+    <None Remove="img\-.png" />
+    <None Remove="img\bangtin2.png" />
+    <None Remove="img\bg.png" />
+    <None Remove="img\Exit.png" />
+    <None Remove="img\FixClient.png" />
+    <None Remove="img\Guide.png" />
+    <None Remove="img\Icon.ico" />
+    <None Remove="img\Next.png" />
+    <None Remove="img\playgame-button.png" />
+    <None Remove="img\Pre.png" />
+    <None Remove="img\update-Button.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\Myriad Arabic Regular.ttf" />
+    <Resource Include="Fonts\UTM A&amp;S Signwriter.ttf" />
+    <Resource Include="img\-.png" />
+    <Resource Include="img\bangtin2.png" />
+    <Resource Include="img\bg.png" />
+    <Resource Include="img\Exit.png" />
+    <Resource Include="img\Icon.ico" />
+    <Resource Include="img\Next.png" />
+    <Resource Include="img\FixClient.png" />
+    <Resource Include="img\playgame-button.png" />
+    <Resource Include="img\Pre.png" />
+    <Resource Include="img\Guide.png" />
+    <Resource Include="img\update-Button.png" />
+  </ItemGroup>
+
+</Project>
